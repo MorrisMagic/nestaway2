@@ -63,13 +63,14 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
     res
-      .cookie("token", token)
-      .json({ msg: "Logged in successfully" });
+      .cookie("token", token, { httpOnly: true })
+      .json({ user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Server error" });
   }
 });
+
 
 // LOGOUT
 router.post("/logout", (req, res) => {
