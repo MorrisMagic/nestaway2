@@ -5,7 +5,9 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Verify from "./pages/Verify";
 import Home from "./pages/Home";
-import  axios  from "axios";
+import CreateProperty from "./pages/CreateProperty";
+import axios from "axios";
+
 
 axios.defaults.withCredentials = true;
 
@@ -24,6 +26,11 @@ function App() {
         <Route path="/" element={
           <ProtectedRoute>
             <Home />
+          </ProtectedRoute>
+        } />
+        <Route path="/create-property" element={
+          <ProtectedRoute>
+            <CreateProperty />
           </ProtectedRoute>
         } />
         <Route path="/signup" element={<Signup />} />

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // ✅ make sure this path is correct
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setUser } = useAuth(); // ✅ get setUser from context
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,16 +18,14 @@ export default function Login() {
       const res = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password,
-      });
+      }, { withCredentials: true });
 
-      if (res.data.msg) {
-        // Backend returned a message (error)
+      // Backend should send user data in response
+      if (res.data.user) {
+        setUser(res.data.user); // <-- update context immediately
+        navigate("/"); // go to home
+      } else if (res.data.msg) {
         setError(res.data.msg);
-      } else {
-        // Login successful
-        localStorage.setItem("token", res.data.token); // save JWT
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        navigate("/"); // redirect to home page
       }
     } catch (err) {
       console.log(err);
